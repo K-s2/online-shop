@@ -67,7 +67,7 @@ class TombstoneStrictForm(Product):
     height = models.CharField(max_length=255, verbose_name="Высота строгой формы")
 
     def __str__(self):
-        return"{} : {}".format(self.category.name, self.title)
+        return"{} : {}".format(self.category.m_name, self.title)
 
 
 class TombstoneUnusualForm(Product):
@@ -108,8 +108,4 @@ class Customer(models.Model):
 
     def __str__(self):
         return "Покупатель:".format(self.first_name, self.user.last_name )
-
-
-
-
 
