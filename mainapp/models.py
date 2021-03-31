@@ -23,7 +23,7 @@ class LatestProducts:
 
 class Category(models.Model):
 
-    m_name = models.CharField(max_length=255)
+    c_name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
 
     def __str__(self):
@@ -67,7 +67,7 @@ class TombstoneStrictForm(Product):
     height = models.CharField(max_length=255, verbose_name="Высота строгой формы")
 
     def __str__(self):
-        return"{} : {}".format(self.category.m_name, self.title)
+        return"{} : {}".format(self.category.c_name, self.title)
 
 
 class TombstoneUnusualForm(Product):
@@ -78,7 +78,7 @@ class TombstoneUnusualForm(Product):
     form = models.CharField(max_length=255, verbose_name="Форма плиты необычной формы")
 
     def __str__(self):
-        return"{} : {}".format(self.category.name, self.title)
+        return"{} : {}".format(self.category.с_name, self.title)
 
 
 class Fence(Product):
@@ -86,7 +86,7 @@ class Fence(Product):
     height = models.CharField(max_length=255, verbose_name="Высота забора")
 
     def __str__(self):
-        return"{} : {}".format(self.category.name, self.title)
+        return"{} : {}".format(self.category.с_name, self.title)
 
 
 class Cart(models.Model):
@@ -107,5 +107,5 @@ class Customer(models.Model):
     address = models.CharField(max_length=255, verbose_name="Адрес")
 
     def __str__(self):
-        return "Покупатель:".format(self.first_name, self.user.last_name )
+        return "Покупатель:".format(self.first_name, self.user.last_name)
 
