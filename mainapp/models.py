@@ -47,7 +47,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name="Цена", default=None)
 
     def __str__(self):
-        return self.some_name
+        return self.title
 
 
 class CartProduct(models.Model):
