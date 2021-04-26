@@ -9,12 +9,18 @@ User = get_user_model()
 class LatestProductManager:
 
     @staticmethod
-    def get_products_for_main_page(self, *args, **kwargs):
+    def get_products_for_main_page(*args, **kwargs):
+        with_respect_to = kwargs.get('with_respect_to')
         products = []
         ct_models = ContentType.objects.filter(model__in=args)
         for ct_model in ct_models:
             model_products = ct_model.model_class()._base_manager.all().order_by('-id')[:5]
             products.extend(model_products)
+        if with_respect_to:
+            ct_model = ContentType.objects.filter(model=with_respect_to)
+            if ct_model.exits():
+                if with_respect_to in args:
+                    return sorted(products, key =lambda x: x.__class__.meta.model_name.tartsswith(with_respect_to), reverse=True)
         return products
 
 
@@ -27,15 +33,21 @@ class Category(models.Model):
     m_name = models.CharField(max_length=255, default=None)
     # slug = models.SlugField(unique=True)
 
+    def __str__(self):
+        return self.m_name
+
 
 class Product(models.Model):
 
-    category = models.OneToOneField(Category, verbose_name="Категория", on_delete=models.CASCADE, default=None)
-    title = models.CharField(max_length=255, name="Наименование", default=None)
+    category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.CASCADE, default=None)
+    title = models.CharField(max_length=255, verbose_name="Наименование", default=None)
     # slug = models.SlugField(unique=True)
     image = models.ImageField(verbose_name="Изображение", default=None)
     description = models.TextField(verbose_name="Описание", null="True", default=None)
     price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name="Цена", default=None)
+
+    def __str__(self):
+        return self.some_name
 
 
 class CartProduct(models.Model):
@@ -57,6 +69,9 @@ class TombstoneStrictForm(Product):
     width = models.CharField(max_length=255, verbose_name="Ширина плиты строгой формы", default=None)
     height = models.CharField(max_length=255, verbose_name="Высота строгой формы", default=None)
 
+    def __str__(self):
+        return "{} : {}".format(self.category.m_name, self.title)
+
 
 class TombstoneUnusualForm(Product):
     length = models.CharField(max_length=255, verbose_name="Длинна плиты необычной формы", default=None)
@@ -64,10 +79,16 @@ class TombstoneUnusualForm(Product):
     height = models.CharField(max_length=255, verbose_name="Высота плиты необычной формы", default=None)
     form = models.CharField(max_length=255, verbose_name="Форма плиты необычной формы", default=None)
 
+    def __str__(self):
+        return "{} : {}".format(self.category.m_name, self.title)
+
 
 class Fence(Product):
     length = models.CharField(max_length=255, verbose_name="Длинна забора", default=None)
     height = models.CharField(max_length=255, verbose_name="Высота забора", default=None)
+
+    def __str__(self):
+        return "{} : {}".format(self.category.m_name, self.title)
 
 
 class Cart(models.Model):
