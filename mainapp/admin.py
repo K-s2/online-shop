@@ -20,6 +20,8 @@ class FenceAdminForm(ModelForm):
         image = self.cleaned_data['image']
         img = Image.open(image)
         min_height, min_width = Product.MIN_RESOLUTION
+        if image.size > Product.MAX_IMAGE_SIZE:
+            raise ValidationError("Размер изображения не должен превышать 3MB!")
         if img.height < min_height or img.width < min_width:
             raise ValidationError('Разрешение изображение меньше минимального!')
         max_height, max_width = Product.MAX_RESOLUTION
