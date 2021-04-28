@@ -50,6 +50,7 @@ class Product(models.Model):
 
     MIN_RESOLUTION = (400, 400)
     MAX_RESOLUTION = (888, 888)
+    MAX_IMAGE_SIZE = 3145728
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.CASCADE, default=None)
     title = models.CharField(max_length=255, verbose_name="Наименование", default=None)
     # slug = models.SlugField(unique=True)
@@ -69,7 +70,7 @@ class Product(models.Model):
         max_height, max_width = self.MAX_RESOLUTION
         if img.height > max_height or img.width > max_width:
             raise MaxResolutionErrorException('Разрешение изображение больше максимального!')
-        return image
+        super().save(*args, **kwargs)
 
 
 class CartProduct(models.Model):
