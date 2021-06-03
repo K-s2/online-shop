@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.views.generic import DetailView
-from .models import Fence, TombstoneUnusualForm, TombstoneStrictForm, Category
+from .models import Fence, TombstoneUnusualForm, TombstoneStrictForm, Category, Product
 
 
 def test_view(request):
-    print(Category.objects.get_categories_for_left_sidebar())
-    return render(request, 'base.html')
+    #print(Category.objects.get_categories_for_left_sidebar())
+    categories = Category.objects.all()
+    products_qs = Product.objects.all()
+    return render(request, 'base.html', context={'categories': categories, 'products_qs': products_qs})
 
 
 class ProductDetailVeiw(DetailView):
